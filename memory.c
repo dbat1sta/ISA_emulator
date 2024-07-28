@@ -35,6 +35,6 @@ void memory_access(Instruction* inst, int* memory) {
             default:
                 break;
         }
-        inst->result = loaded_value; // Overwrite result with loaded value
+        inst->result = loaded_value;
     }
 }
