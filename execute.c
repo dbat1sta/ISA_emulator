@@ -1,34 +1,34 @@
 #include "execute.h"
 
-int perform_alu_operation(ALUOp aluop, int operand1, int operand2) {
+int perform_alu_operation(ALUOp aluop, int left, int right) {
     switch (aluop) {
         case ALU_ADD:
-            return operand1 + operand2;
+            return left + right;
         case ALU_SUB:
-            return operand1 - operand2;
+            return left - right;
         case ALU_AND:
-            return operand1 & operand2;
+            return left & right;
         case ALU_OR:
-            return operand1 | operand2;
+            return left | right;
         case ALU_XOR:
-            return operand1 ^ operand2;
+            return left ^ right;
         case ALU_SLT:
-            return (operand1 < operand2) ? 1 : 0;
+            return (left < right) ? 1 : 0;
         case ALU_SLTU:
-            return ((unsigned int)operand1 < (unsigned int)operand2) ? 1 : 0;
+            return ((unsigned int)left < (unsigned int)right) ? 1 : 0;
+        case ALU_CMP:
+            return (left == right) ? 0 : (left < right) ? -1 : 1;
+        case ALU_LSHIFT:
+            return left << right;
+        case ALU_RSHIFT:
+            return (unsigned int)left >> right;
+        case ALU_ARSHIFT:
+            return left >> right;
         default:
             return 0;
     }
 }
 
-int calculate_memory_address(int base_address, int offset) {
-    return base_address + offset;
-}
-
 void execute_instruction(Instruction* inst) {
-    if (inst->type == LOAD || inst->type == STORE) {
-        inst->result = calculate_memory_address(inst->base_address, inst->offset);
-    } else {
-        inst->result = perform_alu_operation(inst->aluop, inst->operand1, inst->operand2);
-    }
+    inst->result = perform_alu_operation(inst->aluop, inst->left, inst->right);
 }
